@@ -37,7 +37,7 @@
         </dependency>
     </dependencies>
     <build>
-        <testSourceDirectory>${basedir}/src/test/java/</testSourceDirectory>
+        <testSourceDirectory>${basedir}/src/main/test/java/</testSourceDirectory>
         <plugins>
             <plugin>
 

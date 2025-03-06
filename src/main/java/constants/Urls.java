@@ -6,4 +6,5 @@ public class Urls {
     public static final String AUTH_USER_URL = "api/auth/user";
     public static final String AUTH_LOGIN_URL = "api/auth/login";
     public static final String ORDERS_URL = "api/orders";
+    public static final String INGREDIENTS_PATH = "/api/ingredients/";
 }

@@ -5,7 +5,9 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.Assert;
 import pages.Order;
 
-import static constants.Urls.ORDERS_URL;
+import java.util.List;
+
+import static constants.Urls.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
@@ -76,4 +78,18 @@ public class OrderSteps extends Client {
         Assert.assertEquals("You should be authorised", actualMessage);
     }
 
+    // Метод для получения списка ингредиентов
+    @Step("Get list of ingredients")
+    public List<String> getIngredients() {
+        return given()
+                .spec(getSpec())
+                .when()
+                .get(INGREDIENTS_PATH)
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList("data._id", String.class);
+    }
 }
+

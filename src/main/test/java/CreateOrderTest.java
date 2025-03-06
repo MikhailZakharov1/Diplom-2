@@ -6,7 +6,6 @@ import org.junit.Test;
 import pages.Order;
 import steps.OrderSteps;
 import steps.UserSteps;
-import utils.TestDataGenerator;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class CreateOrderTest {
     private Order order;
     private OrderSteps orderSteps;
     private String accessToken;
+    private List<String> ingredientIds;
 
     @Before
     public void setUp() {
@@ -26,17 +26,27 @@ public class CreateOrderTest {
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_PASS);
         accessToken = userSteps.getAccessToken(responseLogin);
 
+        // Получаем список существующих ингредиентов
+        ingredientIds = orderSteps.getIngredients();
+
+        // Проверяем, что ингредиенты есть
+        if (ingredientIds.isEmpty()) {
+            throw new RuntimeException("No ingredients found on the server");
+        }
+
     }
 
     @Test
     @DisplayName("Создание заказа с авторизацией")
     public void createOderWithAuthorizationSuccess() {
-        order = new Order(TestDataGenerator.generateIngredients());
+        // Используем первые 3 ингредиента из списка
+        Order order = new Order(ingredientIds.subList(0, 2));
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithToken(accessToken, order);
+        userSteps.checkAnswerSuccess(responseCreateAuth);
     }
 
     @Test
-    @DisplayName("Создание заказа с авторизацией Создание заказа с авторизацией без ингредиентов")
+    @DisplayName("Создание заказа с авторизацией без ингредиентов")
     public void createOderAuthWithoutIngredientsBadRequest() {
         order = new Order();
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithToken(accessToken, order);

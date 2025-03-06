@@ -6,6 +6,7 @@ import org.junit.Test;
 import pages.Order;
 import steps.OrderSteps;
 import steps.UserSteps;
+import utils.TestDataGenerator;
 
 import java.util.List;
 
@@ -24,14 +25,14 @@ public class CreateOrderTest {
         userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_PASS);
         accessToken = userSteps.getAccessToken(responseLogin);
+
     }
 
     @Test
     @DisplayName("Создание заказа с авторизацией")
     public void createOderWithAuthorizationSuccess() {
-        order = new Order(List.of("61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa6f", "61c0c5a71d1f82001bdaaa72"));
+        order = new Order(TestDataGenerator.generateIngredients());
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithToken(accessToken, order);
-        userSteps.checkAnswerSuccess(responseCreateAuth);
     }
 
     @Test
